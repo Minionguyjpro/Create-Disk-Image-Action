@@ -1,0 +1,23 @@
+name: Create Disk Image
+description: Creates a disk image in .ISO format (Windows only)
+branding:
+ logo: 'file-text'
+ color: 'blue'
+inputs:
+  filename:
+     description: 'The name of the file when saved to a .ISO file'
+     required: true
+     default: 'image.iso'
+  path:
+     description: 'The path where the files are stored that need to be included in the disk image'
+     required: true
+     default: '.\'
+  label:
+     description: 'The label that is used for the disk image in ISO9660 format'
+     required: false
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - run: "%programfiles%\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE
+      shell: cmd
