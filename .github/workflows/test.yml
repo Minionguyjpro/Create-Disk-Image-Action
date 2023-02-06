@@ -1,0 +1,13 @@
+name: Test
+on:
+  push:
+  workflow_dispatch:
+jobs:
+ test:
+  runs-on: windows-latest
+  steps:
+   - uses: Minionguyjpro/Create-Disk-Image@main
+     with:
+       path: example
+       filename: test.iso
+       label: Example
