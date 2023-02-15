@@ -1,7 +1,7 @@
 name: Create Disk Image
 description: Creates a disk image in .ISO format (Windows only)
 branding:
- logo: 'file-text'
+ logo: 'plus-circle'
  color: 'blue'
 inputs:
   filename:
