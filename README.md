@@ -7,6 +7,16 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+jobs:
+ create_iso:
+   runs-on: windows-latest
+   steps:
+    - name: Create .ISO disk image
+      uses: Minionguyjpro/Create-Disk-Image@v1
+      with:
+        path: example
+        filename: example.iso
+        label: Example Setup
   
 ```
 # Settings
