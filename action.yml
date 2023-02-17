@@ -1,11 +1,11 @@
-name: Create Disk Image
-description: Creates a disk image in .ISO format (Windows only)
+name: Create Disk Image Action
+description: Creates a disk image in multiple formats (Windows only)
 branding:
   icon: 'plus-circle'
   color: 'blue'
 inputs:
   filename:
-     description: 'The name of the file when saved to a .ISO file'
+     description: 'The name of the file when saved to a disk image file'
      required: true
      default: 'image.iso'
   path:
