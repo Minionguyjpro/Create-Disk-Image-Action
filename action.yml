@@ -27,20 +27,35 @@ runs:
   using: "composite"
   steps:
     - name: Install ImgBurn
+      id: install_imgburn
       run: choco install imgburn -y
       shell: pwsh
     - name: Clone repository
+      id: clone_repository
       uses: actions/checkout@v3
-    - name: Create disk image  
-      run: '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
+    - name: Create disk image
+      id: create_disk_image
+      run: |
+        echo Creating disk image...
+        '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
+        $Env:IMGBURN_DONE=true
       shell: pwsh
     - name: Upload disk image binary as an artifact
+      id: upload_artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.filename }}
         path: ${{ github.WORKSPACE }}\${{ inputs.filename }}
-    - name:
+      if: IMGBURN_DONE == 'true'
+    - name: Push changes with Git
+      id: push_changes
       run: |
+        
+        echo "Pushing changes to git."
+        timeout /t 1 > nul
+        echo "Pushing changes to git.."
+        timeout /t 1 > nul
+        echo "Pushing changes to git..."
         git config --global user.name '${{ github.actor }}'
         git config --global user.email '${{ github.actor }}@users.noreply.github.com'
         git fetch
