@@ -32,7 +32,7 @@ runs:
     - name: Clone repository
       uses: actions/checkout@v3
     - name: Create disk image  
-      run: '"$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
+      run: '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
       shell: pwsh
     - name: Upload disk image binary as an artifact
       uses: actions/upload-artifact@v3
