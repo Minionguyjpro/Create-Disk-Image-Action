@@ -31,3 +31,7 @@ Keys can be added directly to your .yml config file or referenced from your proj
 | ``label``    | No           | Example     | N/A               | The label that is used for the disk image in ISO9660 + Joliet format           |
 | ``push``     | Yes          | true        | false             | Whether to push the file(s) to GitHub using Git, or keep it only to an artifact|
 | ``push-msg`` | Yes, on push | Create x.img| Create $Env:FILENAME| A push/commit message to use when pushing the changes with Git               |
+## Default variables
+| **Variable name** | **Input name** | **Description**                                                                |
+|-------------------|----------------|--------------------------------------------------------------------------------|
+| ``$Env:FILENAME`` | ``filename``   | Variable for filename, is set locally for commit message (in case push is used)|
