@@ -15,6 +15,14 @@ inputs:
   label:
      description: 'The label that is used for the disk image in ISO9660 format'
      required: false
+  push:
+    description: 'Whether to push the changes using Git, or keep it at the artifact'
+    required: true
+    default: 'false'
+  push-msg:
+    description: 'The commit message for the push'
+    required: true
+    default: 'Create ${{ inputs.filename }}'
 runs:
   using: "composite"
   steps:
@@ -31,3 +39,11 @@ runs:
       with:
         name: ${{ inputs.filename }}
         path: ${{ github.WORKSPACE }}\${{ inputs.filename }}
+    - name:
+      run: |
+        git config --global user.name '${{ github.actor }}'
+        git config --global user.email '${{ github.actor }}@users.noreply.github.com'
+        git fetch
+        git add -A
+        git commit -am "${{ inputs.push-msg }}"
+      if: ${{ inputs.push == 'true' }}
