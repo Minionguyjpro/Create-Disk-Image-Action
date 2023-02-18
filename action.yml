@@ -26,6 +26,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Tell "doing prerequisites"
+      id: tell_prerequisites
+      run: echo "Doing prerequisites..."
+      shell: pwsh
     - name: Install ImgBurn
       id: install_imgburn
       run: choco install imgburn -y
@@ -36,9 +40,8 @@ runs:
     - name: Create disk image
       id: create_disk_image
       run: |
-        echo Creating disk image...
+        echo "Creating disk image..."
         '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
-        $Env:IMGBURN_DONE=true
       shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
@@ -51,11 +54,11 @@ runs:
       id: push_changes
       run: |
         
-        echo "Pushing changes to git."
+        echo "Pushing changes to Git."
         timeout /t 1 > nul
-        echo "Pushing changes to git.."
+        echo "Pushing changes to Git.."
         timeout /t 1 > nul
-        echo "Pushing changes to git..."
+        echo "Pushing changes to Git..."
         git config --global user.name '${{ github.actor }}'
         git config --global user.email '${{ github.actor }}@users.noreply.github.com'
         git fetch
