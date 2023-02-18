@@ -22,7 +22,7 @@ inputs:
   push-msg:
      description: 'The commit message for the push'
      required: true
-     default: 'Create ${{ inputs.filename }}'
+     default: 'Create %INPUT_FILENAME%'
 runs:
   using: "composite"
   steps:
