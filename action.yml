@@ -49,7 +49,6 @@ runs:
       with:
         name: ${{ inputs.filename }}
         path: ${{ github.WORKSPACE }}\${{ inputs.filename }}
-      if: IMGBURN_DONE == 'true'
     - name: Push changes with Git
       id: push_changes
       run: |
