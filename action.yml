@@ -22,7 +22,7 @@ inputs:
   push-msg:
      description: 'The commit message for the push'
      required: true
-     default: "Create %FILENAME%"
+     default: "Create $Env:FILENAME"
 runs:
   using: "composite"
   steps:
@@ -33,7 +33,7 @@ runs:
       uses: actions/checkout@v3
     - name: Create disk image  
       run: '"%programfiles(x86)%\ImgBurn\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
-      shell: cmd
+      shell: pwsh
     - name: Upload disk image binary as an artifact
       uses: actions/upload-artifact@v3
       with:
@@ -45,8 +45,8 @@ runs:
         git config --global user.email '${{ github.actor }}@users.noreply.github.com'
         git fetch
         git add -A
-        set FILENAME=${{ inputs.filename }}
+        $Env:FILENAME="${{ inputs.filename }}"
         git commit -am "${{ inputs.push-msg }}"
         git push
-      shell: cmd
+      shell: pwsh
       if: ${{ inputs.push == 'true' }}
