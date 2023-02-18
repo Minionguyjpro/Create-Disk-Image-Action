@@ -46,5 +46,6 @@ runs:
         git fetch
         git add -A
         git commit -am "${{ inputs.push-msg }}"
+        git push
       shell: cmd
       if: ${{ inputs.push == 'true' }}
