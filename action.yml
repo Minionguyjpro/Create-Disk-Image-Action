@@ -45,7 +45,7 @@ runs:
         git config --global user.email '${{ github.actor }}@users.noreply.github.com'
         git fetch
         git add -A
-        set PUSH_MSG=${{ inputs.filename }}
+        set FILENAME=${{ inputs.filename }}
         git commit -am "${{ inputs.push-msg }}"
         git push
       shell: cmd
