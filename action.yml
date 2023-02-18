@@ -47,6 +47,6 @@ runs:
         git add -A
         $Env:FILENAME="${{ inputs.filename }}"
         git commit -am "${{ inputs.push-msg }}"
-        git push
+        git push origin ${{ github.ref_name }}
       shell: pwsh
       if: ${{ inputs.push == 'true' }}
