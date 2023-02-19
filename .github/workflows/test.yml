@@ -6,7 +6,7 @@ jobs:
  test:
   runs-on: windows-latest
   steps:
-   - uses: Minionguyjpro/Create-Disk-Image@main
+   - uses: Minionguyjpro/Create-Disk-Image@${{ github.ref_name }}
      with:
        path: example
        filename: test.iso
