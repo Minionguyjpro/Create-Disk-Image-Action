@@ -14,4 +14,3 @@ jobs:
        filename: test.iso
        label: Example
        push: true
-     if: github.ref_type ==! 'pull_request'
