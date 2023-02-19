@@ -1,14 +1,17 @@
 name: Test
 on:
   push:
+  pull_request:
   workflow_dispatch:
 jobs:
  test:
   runs-on: windows-latest
   steps:
-   - uses: Minionguyjpro/Create-Disk-Image@${{ github.ref_name }}
+   - name: Test disk image
+     uses: Minionguyjpro/Create-Disk-Image@main
      with:
        path: example
        filename: test.iso
        label: Example
        push: true
+     if: github.ref_type ==! 'pull_request'
