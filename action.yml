@@ -47,7 +47,7 @@ runs:
       id: set_frontslash
       run: |
         $Env:DISK_FILENAME = "${{ inputs.filename }}"
-        $Env:DISK_FILENAME = ($Env:DISK_FILENAME -replace '\','/')
+        $Env:DISK_FILENAME = ($Env:DISK_FILENAME.replace('\','/'))
       shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
