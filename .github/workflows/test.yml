@@ -1,12 +1,14 @@
 name: Test
 on:
   push:
+  pull_request:
   workflow_dispatch:
 jobs:
  test:
   runs-on: windows-latest
   steps:
-   - uses: Minionguyjpro/Create-Disk-Image@main
+   - name: Test disk image
+     uses: Minionguyjpro/Create-Disk-Image@main
      with:
        path: example
        filename: test.iso
