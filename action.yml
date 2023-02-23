@@ -43,16 +43,21 @@ runs:
         echo "Creating disk image..."
         '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
       shell: pwsh
+    - name: Set '\' to '/'
+      id: set_frontslash
+      run: |
+        $Env:DISK_FILENAME = "${{ inputs.filename }}"
+        $Env:DISK_FILENAME = ($Env:DISK_FILENAME -replace '\','/')
+      shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.filename }}
-        path: ${{ github.WORKSPACE }}\${{ inputs.filename }}
+        path: ./$Env:DISK_FILENAME
     - name: Push changes with Git
       id: push_changes
       run: |
-        
         echo "Pushing changes to Git."
         timeout /t 1 > nul
         echo "Pushing changes to Git.."
