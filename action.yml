@@ -54,7 +54,7 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.filename }}
-        path: ./$Env:DISK_FILENAME
+        path: ./${{ env.DISK_FILENAME }}
     - name: Push changes with Git
       id: push_changes
       run: |
