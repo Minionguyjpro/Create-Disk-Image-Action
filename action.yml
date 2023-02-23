@@ -12,6 +12,10 @@ inputs:
      description: 'The path where the files are stored that need to be included in the disk image'
      required: true
      default: '.\'
+  output-dir:
+     description: 'The output directory to save the disk image'
+     required: true
+     default: '.\'
   label:
      description: 'The label that is used for the disk image in ISO9660 format'
      required: false
@@ -41,20 +45,20 @@ runs:
       id: create_disk_image
       run: |
         echo "Creating disk image..."
-        '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.WORKSPACE }}\${{ inputs.path }}" /DEST "${{ github.WORKSPACE }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
+        '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.workspace }}\${{ inputs.path }}" /DEST "${{ github.workspace }}\${{ inputs.output-dir }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
       shell: pwsh
     - name: Set '\' to '/'
       id: set_frontslash
       run: |
-        $Env:DISK_FILENAME = "${{ inputs.filename }}"
-        $Env:DISK_FILENAME = ($Env:DISK_FILENAME.replace('\','/'))
+        $Env:DISK_OUTPUTDIR = "${{ inputs.output-dir }}"
+        $Env:DISK_OUTPUTDIR = ($Env:DISK_OUTPUTDIR.replace('\','/'))
       shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.filename }}
-        path: ./${{ env.DISK_FILENAME }}
+        path: ${{ env.DISK_OUTPUTDIR }}/${{ inputs.filename }}
     - name: Push changes with Git
       id: push_changes
       run: |
