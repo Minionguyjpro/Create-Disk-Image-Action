@@ -14,3 +14,4 @@ jobs:
        filename: test.iso
        label: Example
        push: true
+       output-dir: example
