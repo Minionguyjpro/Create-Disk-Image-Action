@@ -17,7 +17,7 @@ jobs:
        output-dir: example
      if: ${{ github.ref_name == 'main' }}
    - name: Test disk image on ``dev`` branch (push and manually)
-     uses: Minionguyjpro/Create-Disk-Image@main
+     uses: Minionguyjpro/Create-Disk-Image@dev
      with:
        path: example
        filename: test.iso
@@ -26,7 +26,7 @@ jobs:
        output-dir: example
      if: ${{ github.ref_name == 'dev' }}
    - name: Test disk image on PR (pull request)
-     uses: Minionguyjpro/Create-Disk-Image@main
+     uses: Minionguyjpro/Create-Disk-Image@dev
      with:
        path: example
        filename: test.iso
