@@ -8,7 +8,7 @@ jobs:
   runs-on: windows-latest
   steps:
    - name: Test disk image (push and manually)
-     uses: Minionguyjpro/Create-Disk-Image@main
+     uses: Minionguyjpro/Create-Disk-Image@${{ github.ref_name }}
      with:
        path: example
        filename: test.iso
@@ -17,7 +17,7 @@ jobs:
        output-dir: example
      if: github.event_name != 'pull_request'
    - name: Test disk image (pull request)
-     uses: Minionguyjpro/Create-Disk-Image@main
+     uses: Minionguyjpro/Create-Disk-Image@${{ github.ref_name }}
      with:
        path: example
        filename: test.iso
