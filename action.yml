@@ -51,8 +51,9 @@ runs:
       id: set_frontslash
       run: |
         $DISK_OUTPUTDIR = "${{ inputs.output-dir }}"
-        if ($DISK_OUTPUTDIR.contains('\')) {$Env:DISK_OUTPUTDIR = ($DISK_OUTPUTDIR.replace('\','/'))}
-        echo The variable is set to '${{ env.DISK_OUTPUTDIR }}'
+        echo "The variable is set to '${{ env.DISK_OUTPUTDIR }}'"
+        if ($DISK_OUTPUTDIR.contains('\')) {$DISK_OUTPUTDIR = ($DISK_OUTPUTDIR.replace('\','/'))}
+        echo "And now the variable is set to '${{ env.DISK_OUTPUTDIR }}'"
       shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
