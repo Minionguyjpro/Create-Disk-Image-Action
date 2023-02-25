@@ -16,8 +16,8 @@ jobs:
        push: true
        output-dir: example
      if: |
-       github.event_name != 'pull_request'
-       github.ref_name == 'main'
+       ${{ github.event_name != 'pull_request' }}
+       ${{ github.ref_name == 'main' }}
    - name: Test disk image on ``dev`` branch (push and manually)
      uses: Minionguyjpro/Create-Disk-Image@main
      with:
@@ -27,8 +27,8 @@ jobs:
        push: true
        output-dir: example
      if: |
-       github.event_name != 'pull_request'
-       github.ref_name == 'dev'
+       ${{ github.event_name != 'pull_request' }}
+       ${{ github.ref_name == 'dev' }}
    - name: Test disk image on PR (pull request)
      uses: Minionguyjpro/Create-Disk-Image@main
      with:
@@ -37,4 +37,4 @@ jobs:
        label: Example
        push: false
        output-dir: example
-     if: github.event_name == 'pull_request'
+     if: ${{ github.event_name == 'pull_request' }}
