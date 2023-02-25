@@ -51,9 +51,9 @@ runs:
       id: set_frontslash
       run: |
         $Env:DISK_OUTPUTDIR = "${{ inputs.output-dir }}"
-        echo "The variable is set to '${{ env.DISK_OUTPUTDIR }}'"
         if ($Env:DISK_OUTPUTDIR.contains('\')) {$Env:DISK_OUTPUTDIR = ($Env:DISK_OUTPUTDIR.replace('\','/'))}
-        echo "And now the variable is set to '${{ env.DISK_OUTPUTDIR }}'"
+        echo "DISK_OUTPUTDIR=$Env:DISK_OUTPUTDIR" >> $GITHUB_ENV
+        echo "The variable is set to '${{ env.DISK_OUTPUTDIR }}'"
       shell: pwsh
     - name: Upload disk image binary as an artifact
       id: upload_artifact
