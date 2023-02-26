@@ -52,6 +52,7 @@ runs:
       run: |
         ($Env:DISK_OUTPUTDIR = "${{ inputs.output-dir }}") && ($Env:DISK_OUTPUTDIR = ($Env:DISK_OUTPUTDIR.replace('\','/')))
         echo "The variable is set to $Env:DISK_OUTPUTDIR"
+      shell: pwsh
     - name: Set context
         echo "DISK_OUTPUTDIR=$Env:DISK_OUTPUTDIR" >> $Env:GITHUB_ENV
         echo "The context is set to '${{ env.DISK_OUTPUTDIR }}'"
