@@ -3,6 +3,7 @@ description: Creates a disk image in multiple formats (Windows only)
 branding:
   icon: 'plus-circle'
   color: 'blue'
+
 inputs:
   filename:
      description: 'The name of the file when saved to a disk image file'
@@ -27,54 +28,8 @@ inputs:
      description: 'The commit message for the push'
      required: true
      default: "Create $Env:FILENAME"
+
 runs:
-  using: "composite"
-  steps:
-    - name: Tell "doing prerequisites"
-      id: tell_prerequisites
-      run: echo "Doing prerequisites..."
-      shell: pwsh
-    - name: Install ImgBurn
-      id: install_imgburn
-      run: choco install imgburn -y
-      shell: pwsh
-    - name: Clone repository
-      id: clone_repository
-      uses: actions/checkout@v3
-    - name: Create disk image
-      id: create_disk_image
-      run: |
-        echo "Creating disk image..."
-        '& "$Env:PROGRAMFILES (x86)\ImgBurn\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${{ github.workspace }}\${{ inputs.path }}" /DEST "${{ github.workspace }}\${{ inputs.output-dir }}\${{ inputs.filename }}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${{ inputs.label }}" /VOLUMELABEL_JOLIET "${{ inputs.label }}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS'
-      shell: pwsh
-    - name: Set '\' to '/'
-      id: set_frontslash
-      run: |
-        $DISK_OUTPUTDIR = "${{ inputs.output-dir }}"
-        echo "The variable is set to '${{ env.DISK_OUTPUTDIR }}'"
-        if ($DISK_OUTPUTDIR.contains('\')) {$DISK_OUTPUTDIR = ($DISK_OUTPUTDIR.replace('\','/'))}
-        echo "And now the variable is set to '${{ env.DISK_OUTPUTDIR }}'"
-      shell: pwsh
-    - name: Upload disk image binary as an artifact
-      id: upload_artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ inputs.filename }}
-        path: ${{ env.DISK_OUTPUTDIR }}/${{ inputs.filename }}
-    - name: Push changes with Git
-      id: push_changes
-      run: |
-        echo "Pushing changes to Git."
-        timeout /t 1 > nul
-        echo "Pushing changes to Git.."
-        timeout /t 1 > nul
-        echo "Pushing changes to Git..."
-        git config --global user.name '${{ github.actor }}'
-        git config --global user.email '${{ github.actor }}@users.noreply.github.com'
-        git fetch
-        git add -A
-        $Env:FILENAME="${{ inputs.filename }}"
-        git commit -am "${{ inputs.push-msg }}"
-        git push origin ${{ github.ref_name }}
-      shell: pwsh
-      if: ${{ inputs.push == 'true' }}
+  using: 'node16'
+  main: 'dist/index.js'
+
