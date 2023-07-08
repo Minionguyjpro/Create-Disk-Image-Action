@@ -1,0 +1,19 @@
+{
+  "name": "create-disk-image-action",
+  "version": "1.0.0",
+  "description": "Creates a disk image in a few formats, using ImgBurn. (Windows only) # Example usage ```yaml name: Create a disk image on:   push:   pull_request:   workflow_dispatch: jobs:  create_iso:    runs-on: windows-latest    steps:     - name: Create .ISO disk image       uses: Minionguyjpro/Create-Disk-Image@v1       with:         path: example         filename: example.iso         label: Example Setup         push: true         push-msg: Created disk image file $Env:FILENAME",
+  "main": "dist/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1"
+  }
+}
