@@ -18,7 +18,8 @@ async function run() {
     console.log('Cloning repository...');
     const owner = github.context.repo.owner;
     const repo = github.context.repo.repo;
-    await exec(`git clone https://github.com/${owner}/${repo}.git`);
+    const repoPath = '/path/to/repo'; // Replace with the path where you want to clone the repository
+    await exec(`git clone https://github.com/${owner}/${repo}.git ${repoPath}`);
 
     console.log('Creating disk image...');
     await exec(`"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
@@ -32,6 +33,7 @@ async function run() {
     }
 
     console.log(`Uploading disk image binary as an artifact...`);
+    console.log(`outputDir: ${outputDir}`);
     console.log(`diskOutputDir: ${diskOutputDir}`);
     const artifactClient = artifact.create();
     const uploadResponse = await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
