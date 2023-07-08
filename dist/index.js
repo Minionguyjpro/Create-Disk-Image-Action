@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const exec = require('child_process').exec;
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const artifact = require('@actions/artifact');
 
 async function run() {
@@ -27,7 +28,9 @@ async function run() {
     await exec(`git clone https://github.com/${owner}/${repo}.git ${repoPath}`);
 
     console.log('Creating disk image...');
-    await exec(`"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
+    const { stdout, stderr } = await exec(`"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
+    console.log(`ImgBurn stdout: ${stdout}`);
+    console.log(`ImgBurn stderr: ${stderr}`);
 
     console.log('Setting \'\\\' to \'/\'...');
     let diskOutputDir = outputDir;
