@@ -10,6 +10,11 @@ async function run() {
     const filename = core.getInput('filename');
     const label = core.getInput('label');
 
+    console.log(`path: ${path}`);
+    console.log(`outputDir: ${outputDir}`);
+    console.log(`filename: ${filename}`);
+    console.log(`label: ${label}`);
+
     console.log('Doing prerequisites...');
 
     console.log('Installing ImgBurn...');
@@ -33,8 +38,13 @@ async function run() {
     }
 
     console.log(`Uploading disk image binary as an artifact...`);
+    console.log(`Current working directory: ${process.cwd()}`);
     console.log(`outputDir: ${outputDir}`);
     console.log(`diskOutputDir: ${diskOutputDir}`);
+    console.log(`Contents of outputDir:`);
+    await exec(`dir ${outputDir}`);
+    console.log(`Contents of diskOutputDir:`);
+    await exec(`dir ${diskOutputDir}`);
     const artifactClient = artifact.create();
     const uploadResponse = await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
 
