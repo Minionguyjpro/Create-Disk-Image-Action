@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const exec = require('child_process').exec;
-const artifactClient = require('artifact-client');
+const artifact = require('@actions/artifact');
 
 async function run() {
   try {
@@ -30,7 +30,8 @@ async function run() {
     }
 
     console.log(`Uploading disk image binary as an artifact...`);
-    await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
+    const artifactClient = artifact.create();
+    const uploadResponse = await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
 
     console.log(`Pushing changes to Git...`);
     await exec(`git config --global user.name '${github.context.actor}'`);
