@@ -12,13 +12,13 @@ async function run() {
     console.log('Doing prerequisites...');
 
     console.log('Installing ImgBurn...');
-    await exec.exec('choco install imgburn -y');
+    await exec('choco install imgburn -y');
 
     console.log('Cloning repository...');
-    await exec.exec('actions/checkout@v3');
+    await exec('actions/checkout@v3');
 
     console.log('Creating disk image...');
-    await exec.exec(`& "$Env:PROGRAMFILES (x86)\\ImgBurn\\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
+    await exec(`& "$Env:PROGRAMFILES (x86)\\ImgBurn\\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
 
     console.log('Setting \'\\\' to \'/\'...');
     let diskOutputDir = outputDir;
@@ -32,10 +32,10 @@ async function run() {
     await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
 
     console.log(`Pushing changes to Git...`);
-    await exec.exec(`git config --global user.name '${github.context.actor}'`);
-    await exec.exec(`git config --global user.email '${github.context.actor}@users.noreply.github.com'`);
-    await exec.exec(`git fetch`);
-    await exec.exec(`git add -A`);
+    await exec(`git config --global user.name '${github.context.actor}'`);
+    await exec(`git config --global user.email '${github.context.actor}@users.noreply.github.com'`);
+    await exec(`git fetch`);
+    await exec(`git add -A`);
     process.env.FILENAME = filename;
   } catch (error) {
     core.setFailed(error.message);
