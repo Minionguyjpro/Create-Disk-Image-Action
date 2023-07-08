@@ -21,7 +21,7 @@ async function run() {
     await exec(`git clone https://github.com/${owner}/${repo}.git`);
 
     console.log('Creating disk image...');
-    await exec(`& "$Env:PROGRAMFILES (x86)\\ImgBurn\\ImgBurn.exe" /MODE "BUILD" /BUILDINPUTMODE "STANDARD" /BUILDOUTPUTMODE "IMAGEFILE" /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
+    await exec(`"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
 
     console.log('Setting \'\\\' to \'/\'...');
     let diskOutputDir = outputDir;
