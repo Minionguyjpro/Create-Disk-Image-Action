@@ -28,7 +28,10 @@ async function run() {
     await exec(`git clone https://github.com/${owner}/${repo}.git ${repoPath}`);
 
     console.log('Creating disk image...');
-    const { stdout, stderr } = await exec(`"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe" /MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`);
+    const imgBurnPath = `"%ProgramFiles(x86)%\\ImgBurn\\ImgBurn.exe"`;
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL_ISO9660 "${label}" /VOLUMELABEL_JOLIET "${label}" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
+    console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
+    const { stdout, stderr } = await exec(`${imgBurnPath} ${imgBurnArgs}`);
     console.log(`ImgBurn stdout: ${stdout}`);
     console.log(`ImgBurn stderr: ${stderr}`);
 
@@ -54,11 +57,8 @@ async function run() {
     console.log(`Pushing changes to Git...`);
     await exec(`git config --global user.name '${github.context.actor}'`);
     await exec(`git config --global user.email '${github.context.actor}@users.noreply.github.com'`);
-    await exec(`git fetch`);
-    await exec(`git add -A`);
-    process.env.FILENAME = filename;
   } catch (error) {
-    core.setFailed(error.message);
+      core.setFailed(error.message);
   }
 }
 
