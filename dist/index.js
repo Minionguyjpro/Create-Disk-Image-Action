@@ -31,7 +31,7 @@ function run() {
 
     process.chdir(cloneDir); // Change to the cloned repository directory
 
-    const sourceFolderPath = path.join(cloneDir, sourceFolder);
+    const sourceFolderPath = path.join(process.cwd(), sourceFolder);
     const isoFilePath = path.join(sourceFolderPath, filename);
 
     if (!fs.existsSync(isoFilePath)) {
