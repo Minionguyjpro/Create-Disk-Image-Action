@@ -4,10 +4,11 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const artifact = require('@actions/artifact');
 const fs = require('fs');
+const path = require('path');
 
 async function run() {
   try {
-    const path = core.getInput('path');
+    const sourcePath = core.getInput('path');
     const outputDir = core.getInput('output-dir');
     const filename = core.getInput('filename');
 
@@ -23,7 +24,8 @@ async function run() {
 
     console.log('Creating disk image...');
     const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
-    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
+    const resolvedPath = path.resolve(sourcePath); // Resolve the absolute path
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${resolvedPath}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}`);
 
