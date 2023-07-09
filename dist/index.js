@@ -31,12 +31,15 @@ async function run() {
     const { stdout: exampleLsOutput } = await exec(`ls -la ${examplePath}`);
     console.log(exampleLsOutput);
 
-    console.log('Creating disk image...');
-    const absolutePath = path.resolve(sourcePath, filename);
-    console.log('Absolute file path:', absolutePath);
+    console.log('Copying test.iso file...');
+    const imgBurnTestIsoPath = path.join(examplePath, 'test.iso');
+    const destinationPath = path.join(cloneDir, filename);
+    fs.copyFileSync(imgBurnTestIsoPath, destinationPath);
+    console.log('test.iso file copied successfully.');
 
+    console.log('Creating disk image...');
     const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
-    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${absolutePath}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${sourcePath}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
 
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}"`);
