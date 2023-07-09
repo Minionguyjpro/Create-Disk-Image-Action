@@ -26,8 +26,15 @@ async function run() {
 
     console.log('Setting up ImgBurn...');
 
+    const sourceFolderPath = path.join(cloneDir, sourceFolder);
+    const isoFilePath = path.join(sourceFolderPath, 'test.iso');
+
+    if (!fs.existsSync(isoFilePath)) {
+      throw new Error(`File ${isoFilePath} does not exist.`);
+    }
+
     const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
-    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE FOLDER /BUILDOUTPUTMODE IMAGEFILE /SRC "${sourceFolder}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL "${label}" /OVERWRITE YES /START /CLOSE /NOIMAGEDETAILS`;
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE FOLDER /BUILDOUTPUTMODE IMAGEFILE /SRC "${sourceFolderPath}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL "${label}" /OVERWRITE YES /START /CLOSE /NOIMAGEDETAILS`;
 
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
 
