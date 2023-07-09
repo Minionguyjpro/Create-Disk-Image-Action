@@ -7,7 +7,7 @@ jobs:
  test:
   runs-on: windows-latest
   steps:
-   - name: Test disk image on ``main`` branch (push and manually)
+   - name: Test disk image on ``legacy`` branch (push and manually)
      uses: Minionguyjpro/Create-Disk-Image@main
      with:
        path: example
@@ -15,7 +15,7 @@ jobs:
        label: Example
        push: true
        output-dir: example
-     if: ${{ github.ref_name == 'main' }}
+     if: ${{ github.ref_name == 'legacy' }}
    - name: Test disk image on ``dev`` branch (push and manually)
      uses: Minionguyjpro/Create-Disk-Image@dev
      with:
