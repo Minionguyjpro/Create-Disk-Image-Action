@@ -16,8 +16,8 @@ async function run() {
     await exec(`git config --global user.email "${github.context.payload.pusher.email}"`);
     await exec(`git config --global user.name "${github.context.payload.pusher.name}"`);
     await exec(`choco install imgburn -y`);
-    await exec(`git clone https://github.com/${github.context.repo.owner}/${github.context.repo.repo}.git /github/workspace`);
-    process.chdir('/github/workspace');
+    await exec(`git clone https://github.com/${github.context.repo.owner}/${github.context.repo.repo}.git ${path}`);
+    process.chdir(path);
 
     console.log('Creating disk image...');
     const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
