@@ -22,11 +22,18 @@ async function run() {
     await exec(`git clone https://github.com/${github.context.repo.owner}/${github.context.repo.repo}.git ${cloneDir}`);
     process.chdir(cloneDir);
 
+    console.log('Cloned repository contents:');
+    const { stdout: lsOutput } = await exec('ls -la');
+    console.log(lsOutput);
+
     console.log('Creating disk image...');
+    const absolutePath = path.resolve(sourcePath, filename);
+    console.log('Absolute file path:', absolutePath);
+
     const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
-    const resolvedPath = path.resolve(sourcePath); // Resolve the absolute path
-    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${resolvedPath}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${absolutePath}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
+
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}`);
 
     console.log('Uploading disk image as artifact...');
@@ -41,7 +48,6 @@ async function run() {
       continueOnError: false
     };
     const uploadResult = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
-    
   } catch (error) {
     core.setFailed(error.message);
   }
