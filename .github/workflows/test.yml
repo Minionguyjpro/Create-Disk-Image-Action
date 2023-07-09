@@ -13,5 +13,5 @@ jobs:
        path: example
        filename: test.iso
        label: Example
-       push: true
+       push: false
        output-dir: example
