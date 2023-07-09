@@ -42,7 +42,7 @@ function run() {
     
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
     
-    spawnSync(imgBurnPath, imgBurnArgs, { stdio: 'inherit' });    
+    execSync(imgBurnPath, imgBurnArgs, { stdio: 'inherit' });    
 
     console.log('Disk image creation completed.');
 
