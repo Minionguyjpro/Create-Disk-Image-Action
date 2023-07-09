@@ -13,7 +13,7 @@ async function run() {
     const label = core.getInput('label');
     const shouldPush = core.getInput('push').toLowerCase() === 'true';
     const outputDir = core.getInput('output-dir');
-    const pushMsg = core.getInput('push-msg');
+    const pushMsg = core.getInput('push-msg').replace('%FILENAME%', filename);
 
     console.log('Doing prerequisites...');
 
