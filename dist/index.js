@@ -26,6 +26,11 @@ async function run() {
     const { stdout: lsOutput } = await exec('ls -la');
     console.log(lsOutput);
 
+    const examplePath = path.join(cloneDir, 'example');
+    console.log(`Contents of the 'example' folder:`);
+    const { stdout: exampleLsOutput } = await exec(`ls -la ${examplePath}`);
+    console.log(exampleLsOutput);
+
     console.log('Creating disk image...');
     const absolutePath = path.resolve(sourcePath, filename);
     console.log('Absolute file path:', absolutePath);
@@ -48,9 +53,4 @@ async function run() {
       continueOnError: false
     };
     const uploadResult = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
-  } catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run();
+ 
