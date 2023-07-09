@@ -41,24 +41,12 @@ async function run() {
     if (diskOutputDir.includes('\\')) {
       diskOutputDir = diskOutputDir.replace('\\', '/');
       console.log(`And now the variable is set to '${diskOutputDir}'`);
+      core.setOutput('disk-output-dir', diskOutputDir);
+      console.log(`The output variable is set to '${diskOutputDir}'`);
     }
 
-    console.log(`Uploading disk image binary as an artifact...`);
-    console.log(`Current working directory: ${process.cwd()}`);
-    console.log(`outputDir: ${outputDir}`);
-    console.log(`diskOutputDir: ${diskOutputDir}`);
-    console.log(`Contents of outputDir:`);
-    await exec(`dir ${outputDir}`);
-    console.log(`Contents of diskOutputDir:`);
-    await exec(`dir ${diskOutputDir}`);
-    const artifactClient = artifact.create();
-    const uploadResponse = await artifactClient.uploadArtifact(filename, [`${diskOutputDir}/${filename}`], diskOutputDir);
-
-    console.log(`Pushing changes to Git...`);
-    await exec(`git config --global user.name '${github.context.actor}'`);
-    await exec(`git config --global user.email '${github.context.actor}@users.noreply.github.com'`);
   } catch (error) {
-      core.setFailed(error.message);
+    core.setFailed(error.message);
   }
 }
 
