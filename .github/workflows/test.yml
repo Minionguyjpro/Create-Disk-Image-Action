@@ -25,6 +25,15 @@ jobs:
        push: true
        output-dir: example
      if: ${{ github.ref_name == 'dev' }}
+   - name: Test disk image on ``legacy`` branch (push and manually)
+     uses: Minionguyjpro/Create-Disk-Image@legacy
+     with:
+       path: example
+       filename: test.iso
+       label: Example
+       push: true
+       output-dir: example
+     if: ${{ github.ref_name == 'legacy' }}
    - name: Test disk image on PR (pull request)
      uses: Minionguyjpro/Create-Disk-Image@dev
      with:
