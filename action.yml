@@ -27,7 +27,7 @@ inputs:
   push-msg:
      description: 'The commit message for the push'
      required: true
-     default: "Create $Env:FILENAME"
+     default: "Create %FILENAME%"
 
 runs:
   using: 'node16'
