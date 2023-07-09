@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const artifact = require('@actions/artifact');
+const fs = require('fs');
 
 async function run() {
   try {
@@ -12,9 +13,11 @@ async function run() {
 
     console.log('Doing prerequisites...');
 
-    await exec('choco install imgburn -y');
-
-    await exec(`git clone https://github.com/${github.context.repo.owner}/${github.context.repo.repo}.git /path/to/repo`);
+    await exec(`git config --global user.email "${github.context.payload.pusher.email}"`);
+    await exec(`git config --global user.name "${github.context.payload.pusher.name}"`);
+    await exec(`choco install imgburn -y`);
+    await exec(`git clone https://github.com/${github.context.repo.owner}/${github.context.repo.repo}.git /github/workspace`);
+    process.chdir('/github/workspace');
 
     console.log('Creating disk image...');
     const imgBurnPath = `"%ProgramFiles(x86)%\\ImgBurn\\ImgBurn.exe"`;
@@ -26,6 +29,9 @@ async function run() {
     const artifactClient = artifact.create();
     const artifactName = 'disk-image';
     const files = [`${outputDir}\\${filename}`];
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
+    }
     const rootDirectory = outputDir;
     const options = {
       continueOnError: false
