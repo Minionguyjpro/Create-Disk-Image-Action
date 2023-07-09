@@ -34,10 +34,6 @@ function run() {
     const sourceFolderPath = path.join(process.cwd(), sourceFolder);
     const isoFilePath = path.join(sourceFolderPath, filename);
 
-    if (!fs.existsSync(isoFilePath)) {
-      throw new Error(`File ${isoFilePath} does not exist.`);
-    }
-
     execSync(`choco install imgburn -y`);
     const imgBurnPath = `"C:\\Program Files (x86)\\ImgBurn\\ImgBurn.exe"`;
     const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE FOLDER /BUILDOUTPUTMODE IMAGEFILE /SRC "${sourceFolderPath}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /VOLUMELABEL "${label}" /OVERWRITE YES /START /CLOSE /NOIMAGEDETAILS`;
