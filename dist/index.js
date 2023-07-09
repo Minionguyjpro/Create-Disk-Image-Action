@@ -20,15 +20,15 @@ async function run() {
     process.chdir('/github/workspace');
 
     console.log('Creating disk image...');
-    const imgBurnPath = `"%ProgramFiles(x86)%\\ImgBurn\\ImgBurn.exe"`;
-    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
+    const imgBurnPath = `"${process.env.ProgramFiles(x86)}\\ImgBurn\\ImgBurn.exe"`;
+    const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}`);
 
     console.log('Uploading disk image as artifact...');
     const artifactClient = artifact.create();
     const artifactName = 'disk-image';
-    const files = [`${outputDir}\\${filename}`];
+    const files = [`${outputDir}/${filename}`];
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
