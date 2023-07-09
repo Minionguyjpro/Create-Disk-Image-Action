@@ -20,7 +20,7 @@ async function run() {
     process.chdir('/github/workspace');
 
     console.log('Creating disk image...');
-    const imgBurnPath = `"${process.env.ProgramFiles(x86)}\\ImgBurn\\ImgBurn.exe"`;
+    const imgBurnPath = `"${process.env['ProgramFiles(x86)']}\\ImgBurn\\ImgBurn.exe"`;
     const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}/${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}`);
