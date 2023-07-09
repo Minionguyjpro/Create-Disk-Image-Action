@@ -20,7 +20,7 @@ function run() {
     execSync('git config --global user.name "<your-name>"');
 
     const repoName = github.context.repo.repo;
-    const cloneDir = path.join('D:\\REPO', repoName);
+    const cloneDir = path.join('D:\\${repoName}\\${repoName}');
     if (!fs.existsSync(cloneDir)) {
       fs.mkdirSync(cloneDir, { recursive: true });
     }
