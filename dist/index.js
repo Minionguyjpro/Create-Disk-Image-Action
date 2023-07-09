@@ -21,6 +21,16 @@ async function run() {
     const imgBurnArgs = `/MODE BUILD /BUILDINPUTMODE STANDARD /BUILDOUTPUTMODE IMAGEFILE /SRC "${path}" /DEST "${outputDir}\\${filename}" /FILESYSTEM "ISO9660 + Joliet" /OVERWRITE YES /ROOTFOLDER YES /START /CLOSE /NOIMAGEDETAILS`;
     console.log(`Running ImgBurn with command: ${imgBurnPath} ${imgBurnArgs}`);
     const { stdout, stderr } = await exec(`PowerShell -Command "& {${imgBurnPath} ${imgBurnArgs}}`);
+
+    console.log('Uploading disk image as artifact...');
+    const artifactClient = artifact.create();
+    const artifactName = 'disk-image';
+    const files = [`${outputDir}\\${filename}`];
+    const rootDirectory = outputDir;
+    const options = {
+      continueOnError: false
+    };
+    const uploadResult = await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
     
   } catch (error) {
     core.setFailed(error.message);
